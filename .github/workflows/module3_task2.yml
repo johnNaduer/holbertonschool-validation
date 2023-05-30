@@ -1,0 +1,68 @@
+---
+name: module3_task2
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  schedule:
+    - cron: '0 0 * * *' # Run at 00:00 UTC every day
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.20'
+
+      - name: Run setup.sh
+        run: |
+         cd module3_task2
+         ./setup.sh
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.42.1
+          working-directory: module3_task2
+
+      - name: Run make build
+        run: |
+         cd module3_task2
+         make build
+
+      - name: Run make run
+        run: |
+         cd module3_task2
+         make run
+
+      - name: Run make test
+        run: |
+         cd module3_task2
+         make test
+
+      - name: Run make stop
+        run: |
+         cd module3_task2
+         make stop
+
+      - name: Package application
+        run: |
+         cd module3_task2
+         make package
+
+      - name: Run make clear
+        run: |
+         cd module3_task2
+         make clean
